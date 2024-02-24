@@ -13,8 +13,8 @@ export default function UploadInvoicePDF() {
         if (file.type === 'application/pdf') {
             setPdf(file);
             await uploadInvoice(file);
-            await fetchGeneratedText(); 
-           // Fetch generated text after uploading invoice
+            await fetchGeneratedText();
+            // Fetch generated text after uploading invoice
         } else {
             alert('Please drop a PDF file.');
         }
@@ -53,21 +53,21 @@ export default function UploadInvoicePDF() {
                     "messages": [{
                         "role": "user",
                         "content": [{
-                                "type": "text",
-                                "text": "You are a financial accountant and need to extract the data from the given invoice (not from the example given in the text). Format the data as JSON file and should contain the fields shippedfrom, billedto, deliveredto, deliveryid, deliverydate, poid, duedate, quantity, productdescription, unitprice, amount, subtotal, and total. An example of the output format is as follows: {'shippedfrom': 'Location A', 'billedto': 'Customer X', 'deliveredto': 'Customer X', 'deliveryid': 1234, 'deliverydate': '2024-02-25', 'poid': 5678, 'duedate': '2024-03-10', 'quantity': 5, 'productdescription': 'Product A', 'unitprice': 10.00, 'amount': 50.00, 'subtotal': 100.00, 'total': 154.06}. Use the same field names as the example. Return only JSON format strictly."
-                            },
-                            {
-                                "type": "image_url",
-                                "image_url": {
-                                    "url": "https://templates.invoicehome.com/delivery-note-template-us-classic-white-750px.png"
-                                }
+                            "type": "text",
+                            "text": "You are a financial accountant and need to extract the data from the given invoice (not from the example given in the text). Format the data as JSON file and should contain the fields shippedfrom, billedto, deliveredto, deliveryid, deliverydate, poid, duedate, quantity, productdescription, unitprice, amount, subtotal, and total. An example of the output format is as follows: {'shippedfrom': 'Location A', 'billedto': 'Customer X', 'deliveredto': 'Customer X', 'deliveryid': 1234, 'deliverydate': '2024-02-25', 'poid': 5678, 'duedate': '2024-03-10', 'quantity': 5, 'productdescription': 'Product A', 'unitprice': 10.00, 'amount': 50.00, 'subtotal': 100.00, 'total': 154.06}. Use the same field names as the example. Return only JSON format strictly."
+                        },
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": "https://templates.invoicehome.com/delivery-note-template-us-classic-white-750px.png"
                             }
+                        }
                         ]
                     }],
                     "max_tokens": 300
                 })
             });
-            
+
             if (!response.ok) {
                 setGeneratedText(`Error fetching generated text: ${response.statusText}`);
             } else {
@@ -78,7 +78,7 @@ export default function UploadInvoicePDF() {
                     console.log(jsonData);
                     setGeneratedText(jsonData)
                     await uploadInvoiceData(jsonData)
-                    ; // Set the generated text state
+                        ; // Set the generated text state
                 } else {
                     console.log('Generated text is null or empty');
                     setGeneratedText('Generated text is null or empty');
@@ -89,7 +89,6 @@ export default function UploadInvoicePDF() {
             setGeneratedText('Error fetching generated text:', error.message);
         }
         console.log(generatedText);
-        await uploadInvoiceData(generatedText)
     };
 
     const convertDate = (dateString) => {
@@ -98,15 +97,28 @@ export default function UploadInvoicePDF() {
         // Rearrange the parts and join them with '-' to form 'YYYY-MM-DD' format
         return parts[2] + '-' + parts[1] + '-' + parts[0];
     };
-    
+
     const uploadInvoiceData = async (invoiceData) => {
         try {
             // Convert the date format before uploading
-            const convertedDeliveryDate = convertDate(invoiceData.deliverydate);
-            const convertedDueDate = convertDate(invoiceData.duedate);
-    
+            console.log(invoiceData.deliverydate)
+            if (invoiceData.deliverydate) {
+                const convertedDeliveryDate = convertDate(invoiceData.deliverydate);
+                // Use convertedDeliveryDate as needed
+            } else {
+                console.error('Error: Delivery date is undefined or null');
+            }
+            if (invoiceData.duedate) {
+                const convertedDueDate = convertDate(invoiceData.duedate);
+                // Use convertedDeliveryDate as needed
+            } else {
+                console.error('Error: Delivery date is undefined or null');
+            }
+
             // Iterate over the items in the arrays and create a new row for each item
-            for (let i = 0; i < invoiceData.amount.length; i++) {
+            for (let i = 0; i < 3; i++) {
+
+                console.log(i)
                 // Convert dates before creating the new item
                 const newItem = {
                     shippedfrom: invoiceData.shippedfrom,
@@ -117,16 +129,16 @@ export default function UploadInvoicePDF() {
                     poid: invoiceData.poid,
                     duedate: convertedDueDate,
                     quantity: invoiceData.quantity[i].item1, // Adjust according to the specific item
-                    productdescription: invoiceData.productdescription[i].item1,
+                    productdescription: invoiceData.productdescription[i],
                     unitprice: invoiceData.unitprice[i].item1,
                     amount: invoiceData.amount[i].item1,
                     subtotal: invoiceData.subtotal,
                     total: invoiceData.total
                 };
-    
+
                 // Insert the new row into the 'delivery_invoice' table
                 const { data, error } = await supabase.from('delivery_invoice').insert(newItem);
-    
+
                 if (error) {
                     console.error('Error inserting data:', error.message);
                     // Handle the error if insertion fails
@@ -139,7 +151,7 @@ export default function UploadInvoicePDF() {
             console.error('Error uploading invoice data:', error.message);
         }
     };
-    
+
 
 
     return (
