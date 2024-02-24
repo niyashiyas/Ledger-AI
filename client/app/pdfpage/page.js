@@ -1,6 +1,8 @@
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet, PDFViewer } from '@react-pdf/renderer';
 
+import { withRouter } from 'next/navigation'
+
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'column',
@@ -41,10 +43,11 @@ const PdfDocument = ({ formData }) => (
   </Document>
 );
 
-export default function PdfPage({ formData }) {
-    return (
-      <div style={{ height: '100vh' }}>
-        
-      </div>
-    );
-  }
+export default function PdfPage({ }) {
+
+  return (
+    <div style={{ height: '100vh' }}>
+
+    </div>
+  );
+}
