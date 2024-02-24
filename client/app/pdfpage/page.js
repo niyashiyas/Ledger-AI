@@ -1,5 +1,9 @@
-import React from 'react';
+"use client"
+import React, { useEffect, useState } from 'react';
 import { Document, Page, Text, View, StyleSheet, PDFViewer } from '@react-pdf/renderer';
+import { useRouter } from 'next/router';
+import {supabase }from "../../components/supabse/supabase"
+
 
 const styles = StyleSheet.create({
   page: {
@@ -26,6 +30,8 @@ const styles = StyleSheet.create({
 });
 
 const PdfDocument = ({ formData }) => (
+
+  
   <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.section}>
@@ -41,10 +47,45 @@ const PdfDocument = ({ formData }) => (
   </Document>
 );
 
-export default function PdfPage({ formData }) {
-    return (
-      <div style={{ height: '100vh' }}>
-        
-      </div>
-    );
-  }
+
+
+const PdfPage = () => {
+  const [formData, setFormData] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const { data, error } = await supabase
+          .from('formdata')
+          .select('*')
+          .limit(1); // Limit to one row
+
+        if (error) {
+          throw error;
+        }
+
+        if (data && data.length > 0) {
+          setFormData(data[0]); // Assuming you want the first row
+          console.log(formData)
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error.message);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  
+
+  return (
+    <div style={{ height: '100vh' }}>
+      {/* Rendering the PDF with formData */}
+      <PDFViewer style={{ width: '100%', height: '100%' }}>
+        {formData && <PdfDocument formData={formData} />}
+      </PDFViewer>
+    </div>
+  );
+};
+
+export default PdfPage;

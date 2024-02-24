@@ -3,21 +3,23 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { createClient } from '@supabase/supabase-js'
+import { useRouter} from 'next/navigation';
 
-
+import {supabase} from "../../components/supabse/supabase"
 export default function MRDform() {
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  
   const [formData, setFormData] = useState({
-    quantity: '',
-    description: '',
-    codeNumber: '',
-    binCardNo: '',
-    storeLedgerFolio: '',
-    rate: '',
-    amount: ''
+    quantity: '10',
+    description: 'hi',
+    codenumber: '1',
+    bincardno: '1',
+    storeledgerfolio: '1',
+    rate: '1.00',
+    amount: '1.00',
+    formid: '1'
   });
+
+  const router = useRouter();
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -32,9 +34,10 @@ export default function MRDform() {
     try {
       const { error } = await supabase
         .from('formdata')
-        .upsert(formData)
+        .insert(formData)
       console.log(formData)
-      
+      router.push('/pdfpage')
+
     } catch (e) {
       console.log(e)
     }
@@ -54,6 +57,13 @@ export default function MRDform() {
           <div className='flex flex-col'>
             <TextField
               required
+              id="formid"
+              label="formid"
+              value={formData.formid}
+              onChange={handleChange}
+            />
+            <TextField
+              required
               id="quantity"
               label="Quantity"
               value={formData.quantity}
@@ -68,23 +78,23 @@ export default function MRDform() {
             />
             <TextField
               required
-              id="codeNumber"
+              id="codenumber"
               label="Code Number"
-              value={formData.codeNumber}
+              value={formData.codenumber}
               onChange={handleChange}
             />
             <TextField
               required
-              id="binCardNo"
+              id="bincardno"
               label="Bin Card No"
-              value={formData.binCardNo}
+              value={formData.bincardno}
               onChange={handleChange}
             />
             <TextField
               required
-              id="storeLedgerFolio"
+              id="storeledgerfolio"
               label="Store Ledger Folio"
-              value={formData.storeLedgerFolio}
+              value={formData.storeledgerfolio}
               onChange={handleChange}
             />
             <TextField
@@ -101,7 +111,7 @@ export default function MRDform() {
               value={formData.amount}
               onChange={handleChange}
             />
-            <Button variant="contained" onClick={handleSubmit}>NEXT</Button>
+            <Button variant="contained" onClick={handleSubmit} >NEXT</Button>
           </div>
           {/* select authorizers */}
           {/* send to */}
