@@ -3,12 +3,11 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { createClient } from '@supabase/supabase-js'
+import { useRouter} from 'next/navigation';
 
-
+import {supabase} from "../../components/supabse/supabase"
 export default function MRDform() {
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  
   const [formData, setFormData] = useState({
     quantity: '10',
     description: 'hi',
@@ -19,6 +18,8 @@ export default function MRDform() {
     amount: '1.00',
     formid: '1'
   });
+
+  const router = useRouter();
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -35,6 +36,7 @@ export default function MRDform() {
         .from('formdata')
         .insert(formData)
       console.log(formData)
+      router.push('/pdfpage')
 
     } catch (e) {
       console.log(e)
@@ -53,7 +55,7 @@ export default function MRDform() {
           autoComplete="off"
         >
           <div className='flex flex-col'>
-          <TextField
+            <TextField
               required
               id="formid"
               label="formid"
