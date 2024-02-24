@@ -1,7 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { Document, Page, Text, View, StyleSheet, PDFViewer } from '@react-pdf/renderer';
-import { useRouter } from 'next/router';
 import {supabase }from "../../components/supabse/supabase"
 
 
@@ -58,9 +57,8 @@ const PdfPage = (props) => {
     async function fetchData() {
       try {
         const { data, error } = await supabase
-          .from('formdata')
-          .select('*')
-          .limit(1); // Limit to one row
+          .from('mrd')
+          .select('*'); // Limit to one row
 
         if (error) {
           throw error;

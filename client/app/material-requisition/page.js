@@ -10,25 +10,25 @@ import { supabase } from "../../components/supabse/supabase";
 
 export default function MRDform() {
 
+  const [departmentInfo, setDepartmentInfo] = useState('');
+  const [materialDescription, setMaterialDescription] = useState('');
   const [quantity, setQuantity] = useState('');
-  const [description, setDescription] = useState('');
-  const [codenumber, setCodeNumber] = useState('');
-  const [bincardno, setBincardno] = useState('');
-  const [storeledgerfolio, setStoreledgerfolio] = useState('');
-  const [rate, setRate] = useState('');
-  const [amount, setAmount] = useState('');
+  const [specification, setSpecification] = useState('');
+  const [unitPrice, setUnitPrice] = useState('');
+  const [total, setTotal] = useState('');
+  const [preferredSupplier, setPreferredSupplier] = useState('');
   const [formid, setFormid] = useState('');
-  const [showPdf, setShowPdf] = useState(false)
+  const [showPdf, setShowPdf] = useState(true);
 
   // Update formData whenever any state changes
   const formData = {
+    departmentInfo: departmentInfo,
+    materialDescription: materialDescription,
     quantity: quantity,
-    description: description,
-    codenumber: codenumber,
-    bincardno: bincardno,
-    storeledgerfolio: storeledgerfolio,
-    rate: rate,
-    amount: amount,
+    specification: specification,
+    unitPrice: unitPrice,
+    total: total,
+    preferredSupplier: preferredSupplier,
     formid: formid,
   };
 
@@ -38,26 +38,26 @@ export default function MRDform() {
     const { id, value } = e.target;
     // Update individual state based on the field
     switch (id) {
+      case 'departmentInfo':
+        setDepartmentInfo(value);
+        break;
+      case 'materialDescription':
+        setMaterialDescription(value);
+        break;
       case 'quantity':
         setQuantity(value);
         break;
-      case 'description':
-        setDescription(value);
+      case 'specification':
+        setSpecification(value);
         break;
-      case 'codenumber':
-        setCodeNumber(value);
+      case 'unitPrice':
+        setUnitPrice(value);
         break;
-      case 'bincardno':
-        setBincardno(value);
+      case 'total':
+        setTotal(value);
         break;
-      case 'storeledgerfolio':
-        setStoreledgerfolio(value);
-        break;
-      case 'rate':
-        setRate(value);
-        break;
-      case 'amount':
-        setAmount(value);
+      case 'preferredSupplier':
+        setPreferredSupplier(value);
         break;
       case 'formid':
         setFormid(value);
@@ -70,7 +70,7 @@ export default function MRDform() {
   async function handleSubmit() {
     try {
       const { error } = await supabase
-        .from('formdata')
+        .from('mrd') // Adjust the table name as needed
         .insert([formData]);
       console.log(formData);
       setShowPdf(true)
@@ -107,6 +107,20 @@ export default function MRDform() {
             />
             <TextField
               required
+              id="departmentInfo"
+              label="Department Info"
+              value={departmentInfo}
+              onChange={(event) => { handleChange(event); }}
+            />
+            <TextField
+              required
+              id="materialDescription"
+              label="Material Description"
+              value={materialDescription}
+              onChange={(event) => { handleChange(event); }}
+            />
+            <TextField
+              required
               id="quantity"
               label="Quantity"
               value={quantity}
@@ -114,46 +128,32 @@ export default function MRDform() {
             />
             <TextField
               required
-              id="description"
-              label="Description"
-              value={description}
+              id="specification"
+              label="Specification"
+              value={specification}
               onChange={(event) => { handleChange(event); }}
-              />
+            />
             <TextField
               required
-              id="codenumber"
-              label="Code Number"
-              value={codenumber}
+              id="unitPrice"
+              label="Unit Price"
+              value={unitPrice}
               onChange={(event) => { handleChange(event); }}
-              />
+            />
             <TextField
               required
-              id="bincardno"
-              label="Bin Card No"
-              value={bincardno}
+              id="total"
+              label="Total"
+              value={total}
               onChange={(event) => { handleChange(event); }}
-              />
+            />
             <TextField
               required
-              id="storeledgerfolio"
-              label="Store Ledger Folio"
-              value={storeledgerfolio}
+              id="preferredSupplier"
+              label="Preferred Supplier"
+              value={preferredSupplier}
               onChange={(event) => { handleChange(event); }}
-              />
-            <TextField
-              required
-              id="rate"
-              label="Rate"
-              value={rate}
-              onChange={(event) => { handleChange(event); }}
-              />
-            <TextField
-              required
-              id="amount"
-              label="Amount"
-              value={amount}
-              onChange={(event) => { handleChange(event); }}
-              />
+            />
             <Button variant="contained" onClick={handleSubmit} >NEXT</Button>
           </div>
           {/* select authorizers */}
