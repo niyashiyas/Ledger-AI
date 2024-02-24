@@ -83,7 +83,7 @@ export default function MRDform() {
     <div className='bg-white h-screen text-black flex flex-col justify-center items-center'>
       {showPdf &&
       <div className="h-[screen*0.8]">
-        <PagePdf/>
+        <PagePdf title={"Material Requisition"}/>
         <button className='p-2 flex flex-col justify-center border mx-auto  border-black rounded-md' onClick={()=> router.push('./purchase-order')}>Submit For Approval</button>
       </div>
       }

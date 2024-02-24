@@ -5,6 +5,8 @@ import { useRouter } from 'next/router';
 import {supabase }from "../../components/supabse/supabase"
 
 
+
+
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'column',
@@ -30,13 +32,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const PdfDocument = ({ formData, title }) => (
+const PdfDocument = ({ formData }) => (
 
   
   <Document>
   <Page size="A4" style={styles.page}>
     <View style={styles.section}>
-      <Text  style={styles.title}>{title}</Text>
+      <Text  style={styles.title}>GRN</Text>
       <View style={styles.table}>
         {Object.entries(formData).map(([key, value]) => (
           <View style={styles.row} key={key}>
@@ -52,8 +54,10 @@ const PdfDocument = ({ formData, title }) => (
 );
 
 
-const PdfPage = (props) => {
+
+const PdfPage = () => {
   const [formData, setFormData] = useState(null);
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -81,10 +85,10 @@ const PdfPage = (props) => {
   
 
   return (
-    <div className='flex flex-col' style={{ height: '80vh' }}>
+    <div style={{ height: '100vh' }}>
       {/* Rendering the PDF with formData */}
-      <PDFViewer style={{ width: '100%', height: '90%' }}>
-        {formData && <PdfDocument formData={formData} title={props.title}/>}
+      <PDFViewer style={{ width: '100%', height: '100%' }}>
+        {formData && <PdfDocument formData={formData} />}
       </PDFViewer>
     </div>
   );

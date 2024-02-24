@@ -1,8 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import {useRouter} from "next/navigation"
 
 const Navbar = () => {
+  const router = useRouter()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -10,20 +12,18 @@ const Navbar = () => {
   };
 
   return (
-    <div className="py-5 flex flex-col items-between space-y-9 bg-[#009743] px-8 mx-auto text-white">
-      <nav className="flex items-center justify-between">
-        <p className="font-bold text-2xl">Eco-Hub</p>
+    <div className="h-screen">
+    <div className="py-5 flex flex-col bg-[#000301] items-between space-y-9 rounded-b-3xl px-8 mx-auto text-white">
+      <nav className="flex items-center  justify-between">
+        <p className="font-bold text-2xl">AccountingAI</p>
         <div className="hidden md:flex items-center space-x-9 font-bold lg:font-lg">
-          <Link href="/">Home</Link>
-          {/* <Link href="/login" className="px-4 py-2 border-2 border-[#FFCB0A] rounded-lg">
-            Login
-          </Link> */}
-          <Link
-            href="/signup"
-            className="px-4 py-1 border border-transparent rounded text-xl bg-[#FFCB0A] text-black"
-          >
+          <div onClick={()=>router.push("/")}>Home</div>
+          <div
+            onClick={()=>router.push("./signup")}
+            className="px-4 py-1 border border-transparent rounded text-lg bg-white text-black"
+            >
             Sign Up
-          </Link>
+          </div>
         </div>
         <button
           onClick={toggleMobileMenu}
@@ -54,6 +54,7 @@ const Navbar = () => {
         <Link href="/login">Login</Link>
         <Link href="/signup">Sign Up</Link>
       </div>
+    </div>
     </div>
   );
 };

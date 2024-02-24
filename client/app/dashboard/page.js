@@ -1,10 +1,10 @@
 
 "use client"
-import Signup from '../../components/signup/Signup'
+import Navbar from '@/components/navbar/Navbar'
 import React from 'react'
 
 export default function login() {
   return (
-   <Signup />
+   <Navbar />
   )
 }
