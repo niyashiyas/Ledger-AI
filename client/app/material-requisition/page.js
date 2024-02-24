@@ -3,48 +3,91 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useRouter} from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import PagePdf from "../../components/pagepdf/PagePdf.js"
 
-import {supabase} from "../../components/supabse/supabase"
+import { supabase } from "../../components/supabse/supabase";
+
 export default function MRDform() {
-  
-  const [formData, setFormData] = useState({
-    quantity: '10',
-    description: 'hi',
-    codenumber: '1',
-    bincardno: '1',
-    storeledgerfolio: '1',
-    rate: '1.00',
-    amount: '1.00',
-    formid: '1'
-  });
+
+  const [quantity, setQuantity] = useState('');
+  const [description, setDescription] = useState('');
+  const [codenumber, setCodeNumber] = useState('');
+  const [bincardno, setBincardno] = useState('');
+  const [storeledgerfolio, setStoreledgerfolio] = useState('');
+  const [rate, setRate] = useState('');
+  const [amount, setAmount] = useState('');
+  const [formid, setFormid] = useState('');
+  const [showPdf, setShowPdf] = useState(false)
+
+  // Update formData whenever any state changes
+  const formData = {
+    quantity: quantity,
+    description: description,
+    codenumber: codenumber,
+    bincardno: bincardno,
+    storeledgerfolio: storeledgerfolio,
+    rate: rate,
+    amount: amount,
+    formid: formid,
+  };
 
   const router = useRouter();
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [id]: value
-    }));
+    // Update individual state based on the field
+    switch (id) {
+      case 'quantity':
+        setQuantity(value);
+        break;
+      case 'description':
+        setDescription(value);
+        break;
+      case 'codenumber':
+        setCodeNumber(value);
+        break;
+      case 'bincardno':
+        setBincardno(value);
+        break;
+      case 'storeledgerfolio':
+        setStoreledgerfolio(value);
+        break;
+      case 'rate':
+        setRate(value);
+        break;
+      case 'amount':
+        setAmount(value);
+        break;
+      case 'formid':
+        setFormid(value);
+        break;
+      default:
+        break;
+    }
   };
 
   async function handleSubmit() {
-    // Handle form submission, you can access form data from formData state
     try {
       const { error } = await supabase
         .from('formdata')
-        .insert(formData)
-      console.log(formData)
-      router.push('/pdfpage')
-
+        .insert([formData]);
+      console.log(formData);
+      setShowPdf(true)
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   };
 
   return (
     <div className='bg-white h-screen text-black flex flex-col justify-center items-center'>
+      {showPdf &&
+      <div className="h-[screen*0.8]">
+        <PagePdf/>
+        <button className='p-2 flex flex-col justify-center border mx-auto  border-black rounded-md' onClick={()=> router.push('./purchase-order')}>Submit For Approval</button>
+      </div>
+      }
+      {!showPdf &&
       <div>
         <Box
           component="form"
@@ -59,64 +102,65 @@ export default function MRDform() {
               required
               id="formid"
               label="formid"
-              value={formData.formid}
-              onChange={handleChange}
+              value={formid}
+              onChange={(event) => { handleChange(event); }}
             />
             <TextField
               required
               id="quantity"
               label="Quantity"
-              value={formData.quantity}
-              onChange={handleChange}
+              value={quantity}
+              onChange={(event) => { handleChange(event); }}
             />
             <TextField
               required
               id="description"
               label="Description"
-              value={formData.description}
-              onChange={handleChange}
-            />
+              value={description}
+              onChange={(event) => { handleChange(event); }}
+              />
             <TextField
               required
               id="codenumber"
               label="Code Number"
-              value={formData.codenumber}
-              onChange={handleChange}
-            />
+              value={codenumber}
+              onChange={(event) => { handleChange(event); }}
+              />
             <TextField
               required
               id="bincardno"
               label="Bin Card No"
-              value={formData.bincardno}
-              onChange={handleChange}
-            />
+              value={bincardno}
+              onChange={(event) => { handleChange(event); }}
+              />
             <TextField
               required
               id="storeledgerfolio"
               label="Store Ledger Folio"
-              value={formData.storeledgerfolio}
-              onChange={handleChange}
-            />
+              value={storeledgerfolio}
+              onChange={(event) => { handleChange(event); }}
+              />
             <TextField
               required
               id="rate"
               label="Rate"
-              value={formData.rate}
-              onChange={handleChange}
-            />
+              value={rate}
+              onChange={(event) => { handleChange(event); }}
+              />
             <TextField
               required
               id="amount"
               label="Amount"
-              value={formData.amount}
-              onChange={handleChange}
-            />
+              value={amount}
+              onChange={(event) => { handleChange(event); }}
+              />
             <Button variant="contained" onClick={handleSubmit} >NEXT</Button>
           </div>
           {/* select authorizers */}
           {/* send to */}
         </Box>
       </div>
+  }
     </div>
   );
 }

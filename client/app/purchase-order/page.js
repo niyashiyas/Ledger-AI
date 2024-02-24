@@ -38,7 +38,7 @@ const PdfDocument = ({ formData }) => (
   <Document>
   <Page size="A4" style={styles.page}>
     <View style={styles.section}>
-      <Text  style={styles.title}>Material Requisition</Text>
+      <Text  style={styles.title}>Purchase Order</Text>
       <View style={styles.table}>
         {Object.entries(formData).map(([key, value]) => (
           <View style={styles.row} key={key}>

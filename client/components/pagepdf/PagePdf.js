@@ -5,8 +5,6 @@ import { useRouter } from 'next/router';
 import {supabase }from "../../components/supabse/supabase"
 
 
-
-
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'column',
@@ -85,9 +83,9 @@ const PdfPage = () => {
   
 
   return (
-    <div style={{ height: '100vh' }}>
+    <div className='flex flex-col' style={{ height: '80vh' }}>
       {/* Rendering the PDF with formData */}
-      <PDFViewer style={{ width: '100%', height: '100%' }}>
+      <PDFViewer style={{ width: '100%', height: '90%' }}>
         {formData && <PdfDocument formData={formData} />}
       </PDFViewer>
     </div>
