@@ -62,7 +62,7 @@ const PdfPage = () => {
     async function fetchData() {
       try {
         const { data, error } = await supabase
-          .from('formdata')
+          .from('mrd')
           .select('*')
           .limit(1); // Limit to one row
 
