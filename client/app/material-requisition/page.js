@@ -18,7 +18,7 @@ export default function MRDform() {
   const [total, setTotal] = useState('');
   const [preferredSupplier, setPreferredSupplier] = useState('');
   const [formid, setFormid] = useState('');
-  const [showPdf, setShowPdf] = useState(true);
+  const [showPdf, setShowPdf] = useState(false);
 
   // Update formData whenever any state changes
   const formData = {
